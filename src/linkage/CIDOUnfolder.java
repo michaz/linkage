@@ -14,10 +14,9 @@ public class CIDOUnfolder {
 	public double lastVertexOrientation;
 	private boolean isClosed;
 	private int n;
-	public int iterations = 0; 
-	public int badEnergy = 0;
-	
-	// KLUDGE:
+	public int iterations = 0;
+
+    // KLUDGE:
 	public int first=0;
 	
 	public static double signum(double x){
@@ -61,14 +60,10 @@ public class CIDOUnfolder {
 		for(int i=1; i<=(n-1); i++) {
 			virtualLength += Math.abs(grada.getAt(i)) * lengths.getAt(i);
 		}
-		// double intersectionBound = minEucDistance(sx,sy,n,closed) / lengths.max();
 		double intersectionBound = minEucDistance(sx,sy,n,closed) / virtualLength;
 		if(closed) {
 			double overlap = overlap(sx,sy,lengths,n);
-			// double closureBound = overlap / lengths.max();
 			double closureBound = overlap / virtualLength;
-			// DEBUG:
-			// if(closureBound < intersectionBound) System.out.println("Closure constraint hit!");
 			return Math.min(closureBound,intersectionBound);
 		} else {
 			return intersectionBound;
@@ -83,20 +78,10 @@ public class CIDOUnfolder {
 		double dy = sy.getAt(i-1)-sy.getAt(i+1);
 		double dsq = dx*dx+dy*dy;
 		double d = Math.sqrt(dsq);
-		double t = d;
-		double r = Math.max(lengths.getAt(i),lengths.getAt(i-1));
+        double r = Math.max(lengths.getAt(i),lengths.getAt(i-1));
 		double s = Math.min(lengths.getAt(i),lengths.getAt(i-1));
-		
-		/*
-		System.out.print("r: ");System.out.println(r);
-		System.out.print("s: ");System.out.println(s);
-		System.out.print("t: ");System.out.println(t);
-		*/
-		
-		double overlap = Math.min(r+s-t,t+s-r);
-		// r+s-t < 0: circles don't intersect
-		// t+s-r < 0: circle is contained in the other
-		
+
+		double overlap = Math.min(r+s- d, d +s-r);
 		return Math.max(overlap,0.0);
 	}
 	
@@ -207,8 +192,7 @@ public class CIDOUnfolder {
 			double dx = nx.getAt(n-1)-nx.getAt(1);
 			double dy = ny.getAt(n-1)-ny.getAt(1);
 			double dsq = dx*dx+dy*dy;
-			double d = Math.sqrt(dsq);
-			double cp = Math.pow(lengths.getAt(n),2)-Math.pow(lengths.getAt(n-1),2)+dsq;	
+            double cp = Math.pow(lengths.getAt(n),2)-Math.pow(lengths.getAt(n-1),2)+dsq;
 			double c = cp / (2*dsq);
 			double ax = nx.getAt(1) + c*dx;
 			double ay = ny.getAt(1) + c*dy;
@@ -388,30 +372,10 @@ public class CIDOUnfolder {
 		y = ny;
 		iterations++;
 		return deltae;
-		/* debug();
-		System.out.print(iterations); System.out.print(" ");
-		System.out.println(deltat);
-		*/
 	}
 	
 	public void fixNewPoint() {
-		// maximum overlap of l-circles around neighbouring points
-		/* 
-		int besti = 0; double maxoverlap = 0.0;
-		for(int i=1; i<=n; i++) {
-			// Set step size constraint to maintain closure
-			double overlap = overlap(x,y,lengths,i);
-			if(overlap > maxoverlap) {
-				maxoverlap = overlap;
-				besti = i;
-			}
-		} 
-		// System.out.print(besti); System.out.print(": "); System.out.println(maxoverlap);
-		*/
-		
-		
 		// absolute turn angle nearest to 90 degrees
-		
 		int besti = 0; double mindiff = Math.PI/2;
 		for(int i=1; i<=n; i++) {
 			double turnangle = Math.abs(angles.getAt(i-1)-angles.getAt(i));
@@ -422,10 +386,6 @@ public class CIDOUnfolder {
 				besti = i;
 			}
 		}
-		
-		// System.out.print(besti); System.out.print(": "); System.out.println(mindiff);
-		
-		
 		setSpecialPoint(besti);
 	}
 	
@@ -464,8 +424,5 @@ public class CIDOUnfolder {
 		return y.getArray();
 	}
 
-	public int getIterations() {
-		return iterations;
-	}
 }
 	

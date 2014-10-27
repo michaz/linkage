@@ -1,17 +1,9 @@
 package linkage;/*
  * Created on Nov 23, 2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 
-/**
- * @author zilske
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-public class MyDoubleVector implements Cloneable {
+
+class MyDoubleVector implements Cloneable {
 	private double[] v;
 	public int first;
 	public int lastVertex() {
@@ -36,47 +28,18 @@ public class MyDoubleVector implements Cloneable {
 	public void setFirst(int n) {
 		first = first+n-1;
 	}
-	public int length() {
-		return v.length;
-	}
-	public void empty() {
-		for(int i=0; i<v.length; i++) {
-			v[i] = 0.0;
-		}
-	}
-	public double max() {
-		double m=0.0;
-		for(int i=0; i<v.length; i++) {
-			m=Math.max(m,v[i]);
-		}
-		return m;
-	}
-	
-	public void angleNormalize() {
+
+    public void angleNormalize() {
 		double ngrada = 0.0;
-		for(int i=0; i<v.length; i++) {
-			ngrada += Math.abs(v[i]);
-		}
+        for (double aV : v) {
+            ngrada += Math.abs(aV);
+        }
 		for(int i=0; i<v.length; i++) {
 			v[i] = v[i]/ngrada;
 		}
 	}
-	
-	public void normalize() {
-		double norm= 0.0;
-		for(int i=0; i<v.length; i++) {
-			norm += Math.pow(v[i],2);
-		}
-		for(int i=0; i<v.length; i++) {
-			v[i] = v[i]/norm;
-		}
-	}
-	
-	public void resizeAndEmpty(int nn) {
-		if(nn != v.length)
-			v = new double[nn];
-	}
-	public double[] getArray() {
-		return (double[]) v.clone();
+
+    public double[] getArray() {
+		return v.clone();
 	}
 }
